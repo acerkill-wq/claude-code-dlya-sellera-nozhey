@@ -99,7 +99,7 @@ nav button{border:0;border-radius:10px;padding:10px 14px;background:var(--ac);co
 <!-- 1 -->
 <section>
   <div class="hero"><svg viewBox="0 0 400 300"><use href="#chef" x="0" y="20" width="400" height="90" transform="rotate(-14 200 60)"/><use href="#hunt" x="0" y="120" width="400" height="90" transform="rotate(8 200 160)"/><use href="#santoku" x="0" y="215" width="400" height="90" transform="rotate(-5 200 250)"/></svg></div>
-  <p><span class="pill oz">Ozon</span><span class="pill wb">Wildberries</span></p>
+  <p><span class="pill oz">Ozon</span><span class="pill wb">Wildberries</span> <span class="mut" style="font-size:16px">Презентация для Ильяса Хабибулина</span></p>
   <h1>Один человек с Claude Code работает <span class="grad">как небольшой отдел</span></h1>
   <p class="mut">Как отдать ИИ наклейки, учёт, карточки и аналитику, а себе оставить решения и товар. Листайте стрелками или свайпом вниз.</p>
 </section>
@@ -477,6 +477,47 @@ nav button{border:0;border-radius:10px;padding:10px 14px;background:var(--ac);co
       <p class="mut" style="margin-top:10px">Ответ публикуете вы после просмотра. Пример отзыва условный.</p>
     </div>
   </div>
+</section>
+
+<!-- 11a : СДЭК -->
+<section>
+  <span class="tag">СДЭК</span>
+  <h2>Отправки через СДЭК: как это будет</h2>
+  <div class="two">
+    <video controls playsinline preload="metadata" style="width:100%;max-width:340px;border-radius:16px;border:1px solid var(--line);margin:0 auto" src="cdek_silent.mp4"></video>
+    <div class="card">
+      <h3>Что происходит сейчас</h3>
+      <p>В личном кабинете СДЭК каждый заказ оформляется отдельно: ввести данные, оформить накладную, распечатать, наклеить.</p>
+      <h3 style="margin-top:14px">Что можно сделать</h3>
+      <ul><li>Заказы из Excel одним запуском превращаются в заказы СДЭК</li><li>Все накладные и наклейки собираются в один PDF</li><li>Утром приходит сводка: в пути, ждут в пункте выдачи, задержаны</li></ul>
+      <p class="mut" style="margin-top:10px">Ролик без звука, схема-пример.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 11b : кто что делает -->
+<section>
+  <span class="tag">Кто что делает</span>
+  <h2>Что делает Claude сам, а что остаётся за Ильясом</h2>
+  <div class="two">
+    <div class="card"><h3>🤖 Делает сам, без Ильяса</h3><ul>
+      <li>Пишет скрипты и таблицы, считает прибыль по ножам</li>
+      <li>Формирует лист сборки, PDF накладных и наклеек</li>
+      <li>Готовит тексты карточек, ответы на отзывы, ТЗ на фото</li>
+      <li>Собирает ролики для карточек из готовых фото</li>
+      <li>Каждое утро собирает сводку: продажи, остатки, доставки</li></ul></div>
+    <div class="card"><h3>👤 Решает Ильяс</h3><ul>
+      <li>Входит в кабинеты и вводит пароли сам</li>
+      <li>Подтверждает цены, публикацию карточек, рекламу</li>
+      <li>Проверяет юридические и модерационные вопросы по ножам</li>
+      <li>Присылает свои фото и кадры</li></ul></div>
+  </div>
+  <table style="margin-top:16px">
+    <tr><th>Как работает</th><th>Что даёт</th><th>Нюансы</th></tr>
+    <tr><td><b>API</b> (СДЭК, Ozon, WB)</td><td>Надёжно, быстро, по расписанию, без открытого браузера</td><td>Нужны ключи; давать лучше только на чтение, создание заказов СДЭК отдельно</td></tr>
+    <tr><td><b>Браузер Chrome</b> (Claude in Chrome / Cowork)</td><td>Работает в его кабинетах так, как это делает человек: открывает страницы, читает, заполняет формы</td><td>Медленнее, ломается при смене сайта; капчи и пароли только он; каждое важное действие по его «да»</td></tr>
+    <tr><td><b>Файлы</b> (Excel, PDF)</td><td>Учёт, отчёты, наклейки, карточки</td><td>Ничего не нужно подключать</td></tr>
+  </table>
 </section>
 
 <!-- 12 : карта -->
