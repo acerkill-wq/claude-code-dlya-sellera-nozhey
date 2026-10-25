@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Макет карточки: Финка НКВД, Мастерская Бессонова</title>
+<style>
+:root{--blue:#005bff;--blue-l:#e6efff;--pink:#f91155;--ink:#1a1a1a;--mut:#6b7280;--line:#e5e7eb;--bg:#f2f3f5;--red:#c8281e;--cream:#f1e7cf}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:#fff;line-height:1.45}
+img{max-width:100%}
+a{color:var(--blue);text-decoration:none}
+.wrap{max-width:1280px;margin:0 auto;padding:0 16px}
+
+/* шапка-плейсхолдер */
+.top{background:var(--blue);color:#fff}
+.top .wrap{display:flex;align-items:center;gap:12px;height:56px}
+.brandbox{font-weight:800;font-size:18px;letter-spacing:.5px;opacity:.95;white-space:nowrap}
+.cat{background:rgba(255,255,255,.18);border-radius:10px;padding:9px 14px;font-weight:600;font-size:14px;white-space:nowrap}
+.search{flex:1;background:#fff;border-radius:10px;height:38px;color:#9aa3af;display:flex;align-items:center;padding:0 14px;font-size:14px;min-width:0;overflow:hidden;white-space:nowrap}
+.top .links{display:flex;gap:18px;font-size:13px;white-space:nowrap}
+.crumbs{font-size:13px;color:var(--mut);padding:14px 0 6px}
+.crumbs span{margin:0 6px;color:#c3c7ce}
+.crumbs a{color:var(--mut)}
+
+h1{font-size:26px;line-height:1.25;margin:6px 0 8px;font-weight:700}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:14px;color:var(--mut);margin-bottom:16px}
+.stars{color:#ffa800;letter-spacing:1px}
+.meta b{color:var(--ink)}
+
+/* сетка карточки */
+.pdp{display:grid;grid-template-columns:minmax(0,600px) minmax(0,1fr) 320px;gap:28px;align-items:start}
+.gallery{display:grid;grid-template-columns:76px minmax(0,1fr);gap:12px}
+.thumbs{display:flex;flex-direction:column;gap:8px}
+.th{border:2px solid transparent;border-radius:10px;overflow:hidden;cursor:pointer;padding:0;background:none;display:block;width:76px}
+.th.on{border-color:var(--blue)}
+.th:hover{border-color:#9db9ff}
+.th .slide{border-radius:6px;pointer-events:none}
+.stage{position:relative;border-radius:14px;overflow:hidden;background:#eee}
+.stage .nav{z-index:5;position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;border:0;background:rgba(255,255,255,.9);box-shadow:0 2px 8px rgba(0,0,0,.25);font-size:20px;cursor:pointer;color:var(--ink)}
+.stage .prev{left:10px}.stage .next{right:10px}
+.stagebox{min-width:0}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.track::-webkit-scrollbar{display:none}
+.track>.slide{scroll-snap-align:center;scroll-snap-stop:always}
+.dots{position:absolute;left:0;right:0;bottom:10px;display:flex;justify-content:center;gap:7px;z-index:5}
+.dots i{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.45);transition:.2s;cursor:pointer}
+.dots i.on{background:#fff;width:20px;border-radius:4px}
+.stage .tag{position:absolute;left:10px;top:10px;background:var(--pink);color:#fff;font-size:12px;font-weight:700;padding:4px 9px;border-radius:8px;z-index:5}
+
+.mid h2{font-size:18px;margin:0 0 10px}
+.keyspecs{list-style:none;margin:0 0 16px;padding:0;font-size:14px}
+.keyspecs li{display:flex;gap:8px;padding:5px 0}
+.keyspecs li span:first-child{color:var(--mut);flex:0 0 100px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.badge{background:var(--blue-l);color:var(--blue);font-weight:600;font-size:13px;padding:6px 11px;border-radius:9px}
+.shop{display:flex;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.logo{width:44px;height:44px;border-radius:50%;background:#1b1b1b;color:#f1e7cf;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:15px;flex:none}
+.shop b{display:block;font-size:15px}
+.shop small{color:var(--mut)}
+
+.buy{position:sticky;top:12px;border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 6px 24px rgba(0,0,0,.06);background:#fff}
+.price{font-size:32px;font-weight:800;margin:0;line-height:1.1}
+.price small{display:block;font-size:12px;font-weight:500;color:var(--mut);margin-top:2px}
+.price2{margin:10px 0 14px;font-size:15px}
+.price2 b{font-size:17px}
+.btn{display:block;width:100%;border:0;border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:default;margin-top:8px;text-align:center}
+.b1{background:var(--blue);color:#fff}
+.b2{background:var(--blue-l);color:var(--blue)}
+.dl{margin-top:16px;font-size:14px;border-top:1px solid var(--line);padding-top:12px}
+.dl div{display:flex;justify-content:space-between;gap:10px;padding:3px 0}
+.dl span{color:var(--mut)}
+
+.tabs{display:flex;gap:22px;border-bottom:1px solid var(--line);margin:0 0 18px;overflow-x:auto;white-space:nowrap;font-size:15px;font-weight:600}
+.tabs a{color:var(--mut);padding:10px 0;border-bottom:3px solid transparent}
+.tabs a:first-child{color:var(--ink);border-color:var(--blue)}
+.mbar{display:none}
+/* секции */
+section{padding:34px 0 6px}
+section>h2,.wrap>h2{font-size:24px;margin:0 0 18px}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.card{border-radius:16px;padding:22px;border:1px solid var(--line)}
+.card.old{background:var(--bg)}
+.card.new{background:#fff;border:2px solid var(--blue);box-shadow:0 8px 30px rgba(0,91,255,.12)}
+.lab{display:inline-block;font-size:12px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;padding:4px 10px;border-radius:7px;margin-bottom:12px}
+.old .lab{background:#d7dae0;color:#4b5563}
+.new .lab{background:var(--blue);color:#fff}
+.card h3{font-size:12px;color:var(--mut);margin:14px 0 4px;text-transform:uppercase;letter-spacing:.6px}
+.card .ttl{font-size:18px;font-weight:700;line-height:1.3;margin:0}
+.card p{margin:0;font-size:15px}
+.tags{color:#7c8794;font-size:15px;word-break:break-word}
+.new .tags{color:var(--blue)}
+.ch{margin:14px 0 0;padding:12px 14px;background:#f6f9ff;border-radius:10px;font-size:13px;color:#334155}
+.ch b{color:var(--ink)}
+.ch ul{margin:6px 0 0;padding-left:18px}
+
+.specs{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+.sr{display:flex;align-items:baseline;gap:8px;padding:9px 0;font-size:15px}
+.sr i{flex:1;border-bottom:1px dotted #c7ccd4;transform:translateY(-4px);min-width:16px}
+.sr span:first-child{color:var(--mut)}
+.sr span:last-child{text-align:right;max-width:55%}
+.desc{max-width:880px;font-size:16px}
+.desc p{margin:0 0 12px}
+
+.rev{display:grid;grid-template-columns:260px 1fr;gap:34px;align-items:start}
+.big{font-size:56px;font-weight:800;line-height:1}
+.bars div{display:grid;grid-template-columns:40px 1fr 54px;gap:10px;align-items:center;font-size:14px;margin:7px 0}
+.bar{height:8px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:#ffa800}
+.note{margin-top:14px;font-size:14px;color:var(--mut);max-width:560px}
+
+.foot{margin:44px 0 0;background:var(--bg);padding:20px 0 28px;text-align:center;font-size:13px;color:var(--mut)}
+
+/* ===== слайды 3:4 (премиум: графит + латунь) ===== */
+.slide{--gold:#c9a25c;position:relative;aspect-ratio:3/4;width:100%;container-type:inline-size;overflow:hidden;flex:none;background:radial-gradient(120% 75% at 50% 0,#2a2b2f 0,#17171a 55%,#0b0b0c 100%);color:#f3efe6;font-family:"Helvetica Neue",Arial,sans-serif}
+.slide *{box-sizing:border-box}
+.slide::after{content:"";position:absolute;inset:2.6cqw;border:.2cqw solid rgba(201,162,92,.4);border-radius:1.4cqw;pointer-events:none}
+.slide .abs{position:absolute}
+.slide .brand,.slide .pg{position:absolute;top:6.4cqw;font:600 2.2cqw/1 "Helvetica Neue",Arial,sans-serif;letter-spacing:.65cqw;color:var(--gold);text-transform:uppercase;white-space:nowrap}
+.slide .brand{left:7cqw}.slide .pg{right:7cqw}
+.slide .ttl{position:absolute;left:7cqw;font:400 10.5cqw/1 Georgia,"Times New Roman",serif;color:#fff;letter-spacing:-.1cqw;white-space:nowrap}
+.slide .sub{position:absolute;left:7cqw;font:600 2.8cqw/1 "Helvetica Neue",Arial,sans-serif;letter-spacing:.6cqw;text-transform:uppercase;color:var(--gold)}
+.slide .panel{position:absolute;overflow:hidden;background:#e4e3e1;border-radius:2.4cqw;box-shadow:0 2cqw 5cqw rgba(0,0,0,.55)}
+.slide .panel img{position:absolute;max-width:none;display:block;width:calc(750 * var(--k));left:calc(var(--x) * var(--k) * -1);top:calc(var(--y) * var(--k) * -1);filter:contrast(1.04) saturate(1.05)}
+.slide .gn{background:linear-gradient(180deg,#f0d396,#b98b3f);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:Georgia,"Times New Roman",serif}
+.slide .st{position:absolute;border-top:.2cqw solid rgba(201,162,92,.55);padding-top:1.6cqw}
+.slide .st .gn{font-size:12cqw;line-height:1}
+.slide .st .gn i{font-style:normal;font-size:4.4cqw;margin-left:1cqw;letter-spacing:.2cqw}
+.slide .st .lb{font:600 2.3cqw/1.2 "Helvetica Neue",Arial,sans-serif;letter-spacing:.3cqw;text-transform:uppercase;color:#aaa49a;margin-top:1.4cqw}
+.slide .ft{position:absolute;border-top:.2cqw solid rgba(201,162,92,.55);padding-top:2cqw}
+.slide .ft .n{font:600 2.4cqw/1 "Helvetica Neue",Arial,sans-serif;letter-spacing:.5cqw;color:var(--gold)}
+.slide .ft b{display:block;font:400 4.1cqw/1.12 Georgia,"Times New Roman",serif;color:#fff;margin-top:1.4cqw}
+.slide .ft span{display:block;font:400 2.9cqw/1.3 "Helvetica Neue",Arial,sans-serif;color:#aaa49a;margin-top:.9cqw}
+.slide .ring{position:absolute;width:11cqw;height:11cqw;border-radius:50%;border:.25cqw solid var(--gold);display:flex;align-items:center;justify-content:center;font:400 5.4cqw/1 Georgia,serif;color:var(--gold)}
+
+/* ===== адаптив ===== */
+@media (max-width:1100px){
+  .pdp{grid-template-columns:minmax(0,1fr) 300px}
+  .mid{grid-column:1 / 2;grid-row:2}
+  .buy{grid-column:2;grid-row:1 / span 2}
+}
+@media (max-width:820px){
+  h1{font-size:20px}
+  .pdp{grid-template-columns:1fr;gap:18px}
+  .mid,.buy{grid-column:auto;grid-row:auto}
+  .buy{position:static}
+  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:20;background:#fff;border-top:1px solid var(--line);padding:10px 14px;gap:12px;align-items:center;box-shadow:0 -4px 16px rgba(0,0,0,.08)}
+  .mbar b{font-size:20px;display:block;line-height:1.1}.mbar small{color:var(--mut);font-size:11px}
+  .mbar .btn{margin:0;flex:1;padding:13px}
+  body{padding-bottom:70px}
+  .gallery{grid-template-columns:1fr}
+  .thumbs{flex-direction:row;order:2;overflow-x:auto;padding-bottom:4px}
+  .th{flex:none;width:64px}
+  .top .links,.cat{display:none}
+  .ba,.specs,.rev{grid-template-columns:1fr;gap:16px}
+  .specs{gap:0}
+  .keyspecs li span:first-child{flex-basis:120px}
+  .sr span:last-child{max-width:60%}
+  section>h2,.wrap>h2{font-size:21px}
+}
+</style>
+</head>
+<body>
+
+<!-- шапка-плейсхолдер -->
+<div class="top"><div class="wrap">
+  <div class="brandbox">МАРКЕТПЛЕЙС</div>
+  <div class="cat">&#9776; Каталог</div>
+  <div class="search">Искать товары</div>
+  <div class="links"><span>Заказы</span><span>Избранное</span><span>Корзина</span></div>
+</div></div>
+
+<div class="wrap">
+  <div class="crumbs"><a>Главная</a><span>/</span><a>Хобби и творчество</a><span>/</span><a>Охота и рыбалка</a><span>/</span><a>Ножи</a><span>/</span>Туристические ножи</div>
+
+  <h1>Нож Финка НКВД туристический, сталь 65Х13, 57 HRC, дерево, с ножнами, ручная работа, Мастерская Бессонова</h1>
+  <div class="meta">
+    <span><span class="stars">★★★★★</span> <b>5,0</b></span>
+    <span>822 отзыва</span>
+    <span>Артикул: 1851907402</span>
+  </div>
+
+  <div class="tabs"><a>О товаре</a><a>Характеристики</a><a>Описание</a><a>Отзывы 822</a><a>Было / Стало</a></div>
+  <div class="pdp">
+    <!-- галерея -->
+    <div class="gallery">
+      <div class="thumbs" id="thumbs" aria-label="Фото товара"></div>
+      <div class="stagebox">
+        <div class="stage">
+          <div class="track" id="track"></div>
+          <button class="nav prev" id="prev" aria-label="Назад">&#10094;</button>
+          <button class="nav next" id="next" aria-label="Вперёд">&#10095;</button>
+          <div class="dots" id="dots"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- средний блок -->
+    <div class="mid">
+      <h2>О товаре</h2>
+      <div class="badges">
+        <span class="badge">100% ручная работа</span>
+        <span class="badge">Ножны в комплекте</span>
+        <span class="badge">Сталь 65Х13</span>
+      </div>
+      <ul class="keyspecs">
+        <li><span>Тип</span><span>нож туристический</span></li>
+        <li><span>Сталь</span><span>65Х13, нержавеющая</span></li>
+        <li><span>Твёрдость</span><span>57 HRc</span></li>
+        <li><span>Общая длина</span><span>25,5 см</span></li>
+        <li><span>Длина лезвия</span><span>13,5 см</span></li>
+        <li><span>Рукоять</span><span>дерево (чёрный граб со звёздами)</span></li>
+        <li><span>В комплекте</span><span>ножны из натуральной кожи</span></li>
+      </ul>
+      <div class="shop">
+        <div class="logo">МБ</div>
+        <div><b>Мастерская Бессонова</b><small>Рейтинг 5,0 · 822 отзыва · Ворсма, Нижегородская область</small></div>
+      </div>
+    </div>
+
+    <!-- блок покупки -->
+    <aside class="buy">
+      <p class="price">5 969 ₽<small>с картой банка</small></p>
+      <p class="price2"><b>6 516 ₽</b> с другими способами оплаты</p>
+      <span class="btn b1">В корзину</span>
+      <span class="btn b2">Купить сейчас</span>
+      <div class="dl">
+        <div><span>Доставка</span><b>до пункта выдачи или курьером</b></div>
+        <div><span>Продавец</span><b>Мастерская Бессонова</b></div>
+        <div><span>Оценка магазина</span><b>★ 5,0</b></div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<!-- БЫЛО / СТАЛО -->
+<section><div class="wrap">
+  <h2>Было / Стало: название и описание</h2>
+  <div class="ba">
+    <div class="card old">
+      <span class="lab">Было</span>
+      <h3>Название</h3>
+      <p class="ttl">Нож Финка НКВД 65х13 авторская, звезды</p>
+      <h3>Описание</h3>
+      <p class="tags">#финка #нквд #нож #нож_финка #ссср #ножнаподарок #авторскийнож #ножручнойработы</p>
+      <div class="ch" style="background:#eceef1">В описании сейчас только хештеги, без предложений. Покупателю и поиску не за что зацепиться.</div>
+    </div>
+    <div class="card new">
+      <span class="lab">Стало</span>
+      <h3>Название</h3>
+      <p class="ttl">Нож Финка НКВД туристический, сталь 65Х13, 57 HRC, дерево, с ножнами, ручная работа, Мастерская Бессонова</p>
+      <h3>Описание</h3>
+      <p>Нож «Финка НКВД» сделан в Мастерской Александра Бессонова в городе Ворсма Нижегородской области: это 100% ручная работа и авторское литьё из латуни. Клинок из нержавеющей стали 65Х13 длиной 13,5 см, толщиной 2,6 мм и твёрдостью 57 HRc, с прямым обухом и прямой заточкой. Рукоять из дерева (чёрный граб со звёздами) травмобезопасная; внутри хвостовик, шпилька через всю рукоять, гайка и эпоксидная смола. Общая длина ножа 25,5 см, вес 250 г, цвет чёрный матовый, есть антикоррозийное покрытие. В комплекте ножны из натуральной кожи с тиснением герба НКВД. Нож подойдёт для похода и рыбалки, а ещё это готовый подарок.</p>
+      <h3>Хештеги</h3>
+      <p class="tags">#финканквд #ножтуристический #нож65х13 #ножручнойработы #ножсножнами #ножвподарок #ворсма #мастерскаябессонова</p>
+      <div class="ch"><b>Что добавлено:</b>
+        <ul>
+          <li>тип, сталь, твёрдость, материал рукояти и комплект в названии</li>
+          <li>название магазина: покупатель находит вашу мастерскую</li>
+          <li>описание из фактов о ноже: размеры, конструкция, ножны, сценарии</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ХАРАКТЕРИСТИКИ -->
+<section><div class="wrap">
+  <h2>Характеристики</h2>
+  <div class="specs">
+    <div>
+      <div class="sr"><span>Тип</span><i></i><span>нож туристический</span></div>
+      <div class="sr"><span>Общая длина</span><i></i><span>25,5 см</span></div>
+      <div class="sr"><span>Длина лезвия</span><i></i><span>13,5 см</span></div>
+      <div class="sr"><span>Толщина лезвия</span><i></i><span>2,6 мм</span></div>
+      <div class="sr"><span>Твёрдость</span><i></i><span>57 HRc</span></div>
+      <div class="sr"><span>Сталь</span><i></i><span>65Х13 (нержавеющая)</span></div>
+      <div class="sr"><span>Вес</span><i></i><span>250 г</span></div>
+    </div>
+    <div>
+      <div class="sr"><span>Форма клинка</span><i></i><span>с прямым обухом</span></div>
+      <div class="sr"><span>Рукоять</span><i></i><span>дерево (чёрный граб со звёздами), травмобезопасная</span></div>
+      <div class="sr"><span>Заточка</span><i></i><span>прямая</span></div>
+      <div class="sr"><span>Ножны</span><i></i><span>в комплекте (натуральная кожа с тиснением герба НКВД)</span></div>
+      <div class="sr"><span>Покрытие</span><i></i><span>антикоррозийное</span></div>
+      <div class="sr"><span>Цвет</span><i></i><span>чёрный матовый</span></div>
+      <div class="sr"><span>Страна</span><i></i><span>Россия</span></div>
+      <div class="sr"><span>Особенности</span><i></i><span>авторское литьё из латуни, 100% ручная работа</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ОПИСАНИЕ -->
+<section><div class="wrap">
+  <h2>Описание</h2>
+  <div class="desc">
+    <p>Нож «Финка НКВД» сделан в Мастерской Александра Бессонова в городе Ворсма Нижегородской области: это 100% ручная работа и авторское литьё из латуни. Клинок из нержавеющей стали 65Х13 длиной 13,5 см, толщиной 2,6 мм и твёрдостью 57 HRc, с прямым обухом и прямой заточкой.</p>
+    <p>Рукоять из дерева (чёрный граб со звёздами) травмобезопасная; внутри хвостовик, шпилька через всю рукоять, гайка и эпоксидная смола. Общая длина ножа 25,5 см, вес 250 г, цвет чёрный матовый, есть антикоррозийное покрытие.</p>
+    <p>В комплекте ножны из натуральной кожи с тиснением герба НКВД. Нож подойдёт для похода и рыбалки, а ещё это готовый подарок.</p>
+    <p class="tags">#финканквд #ножтуристический #нож65х13 #ножручнойработы #ножсножнами #ножвподарок #ворсма #мастерскаябессонова</p>
+  </div>
+</div></section>
+
+<!-- ОТЗЫВЫ -->
+<section><div class="wrap">
+  <h2>Отзывы о товаре</h2>
+  <div class="rev">
+    <div>
+      <div class="big">5,0</div>
+      <div class="stars" style="font-size:22px">★★★★★</div>
+      <div style="color:var(--mut);margin-top:4px">822 отзыва</div>
+    </div>
+    <div>
+      <div class="bars">
+        <div><span>5 ★</span><div class="bar"><i style="width:92.6%"></i></div><span>761</span></div>
+        <div><span>1–4 ★</span><div class="bar"><i style="width:7.4%"></i></div><span>61</span></div>
+      </div>
+      <p class="note">Тексты отзывов покупателей на макете не показаны: здесь на странице будут настоящие отзывы с Ozon. Распределение по звёздам: 761 пятёрка из 822 оценок, остальные 61 оценка сведены в одну строку.</p>
+    </div>
+  </div>
+</div></section>
+
+<div class="foot"><div class="wrap">Макет-иллюстрация, не реальная карточка Ozon. Фото и тексты подготовлены для показа продавцу.</div></div>
+
+<div class="mbar"><div><b>5 969 ₽</b><small>с картой банка</small></div><span class="btn b1">В корзину</span></div>
+
+<!-- ======= ИСХОДНЫЕ СЛАЙДЫ (клонируются скриптом в ленту и большое окно) ======= -->
+<div id="src" hidden>
+
+  <!-- 1. Обложка -->
+  <div class="slide">
+    <div class="brand">Мастерская Бессонова</div><div class="pg">01 / 05</div>
+    <div class="ttl" style="top:13cqw">Финка НКВД</div>
+    <div class="sub" style="top:27.5cqw">Ручная работа · Ворсма</div>
+    <div class="panel" style="left:10cqw;top:34cqw;width:80cqw;height:72.4cqw"><img src="finka2.webp" alt="Финка НКВД" style="--k:.10667cqw;--x:0;--y:240"></div>
+    <div class="ft" style="left:7cqw;top:110cqw;width:27cqw"><div class="n">01</div><b>Сталь 65Х13</b><span>нержавеющая</span></div>
+    <div class="ft" style="left:36.5cqw;top:110cqw;width:27cqw"><div class="n">02</div><b>Чёрный граб</b><span>и латунь</span></div>
+    <div class="ft" style="left:66cqw;top:110cqw;width:27cqw"><div class="n">03</div><b>Ножны</b><span>в комплекте</span></div>
+  </div>
+
+  <!-- 2. Размеры -->
+  <div class="slide">
+    <div class="brand">Мастерская Бессонова</div><div class="pg">02 / 05</div>
+    <div class="ttl" style="top:13cqw">В цифрах</div>
+    <div class="sub" style="top:27.5cqw">Размеры и вес</div>
+    <div class="panel" style="left:7cqw;top:34cqw;width:86cqw;height:40cqw"><img src="finka3.webp" alt="Клинок с линейкой" style="--k:.2048cqw;--x:330;--y:260"></div>
+    <div class="st" style="left:7cqw;top:80cqw;width:26cqw"><div class="gn" style="font-size:10cqw">25,5<i style="font-size:3.8cqw">см</i></div><div class="lb">общая длина</div></div>
+    <div class="st" style="left:37cqw;top:80cqw;width:26cqw"><div class="gn" style="font-size:10cqw">13,5<i style="font-size:3.8cqw">см</i></div><div class="lb">длина клинка</div></div>
+    <div class="st" style="left:67cqw;top:80cqw;width:26cqw"><div class="gn" style="font-size:10cqw">2,6<i style="font-size:3.8cqw">мм</i></div><div class="lb">толщина клинка</div></div>
+    <div class="st" style="left:7cqw;top:100cqw;width:40cqw"><div class="gn" style="font-size:10cqw">250<i style="font-size:3.8cqw">г</i></div><div class="lb">вес</div></div>
+    <div class="st" style="left:53cqw;top:100cqw;width:40cqw"><div class="gn" style="font-size:10cqw">57<i style="font-size:3.8cqw">HRc</i></div><div class="lb">твёрдость</div></div>
+    <div class="abs" style="left:7cqw;top:121cqw;width:86cqw;font:400 2.9cqw/1.4 Helvetica Neue,Arial,sans-serif;color:#aaa49a;letter-spacing:.2cqw">Сталь 65Х13 · прямой обух · прямая заточка</div>
+  </div>
+
+  <!-- 3. Конструкция -->
+  <div class="slide">
+    <div class="brand">Мастерская Бессонова</div><div class="pg">03 / 05</div>
+    <div class="ttl" style="top:13cqw">Конструкция</div>
+    <div class="sub" style="top:27.5cqw">Что внутри рукояти</div>
+    <div class="panel" style="left:6cqw;top:34cqw;width:88cqw;height:42cqw"><img src="finka5.webp" alt="Схема конструкции" style="--k:.11733cqw;--x:0;--y:560"></div>
+    <div class="ft" style="left:7cqw;top:82cqw;width:86cqw"><div class="n">01</div><b>Шпилька через всю рукоять</b><span>хвостовик и гайка</span></div>
+    <div class="ft" style="left:7cqw;top:98cqw;width:86cqw"><div class="n">02</div><b>Эпоксидная смола</b><span>в конструкции рукояти</span></div>
+    <div class="ft" style="left:7cqw;top:114cqw;width:86cqw"><div class="n">03</div><b>Травмобезопасная рукоять</b><span>чёрный граб со звёздами</span></div>
+  </div>
+
+  <!-- 4. Ножны -->
+  <div class="slide">
+    <div class="brand">Мастерская Бессонова</div><div class="pg">04 / 05</div>
+    <div class="ttl" style="top:13cqw">Ножны</div>
+    <div class="sub" style="top:27.5cqw">В комплекте с ножом</div>
+    <div class="panel" style="left:7cqw;top:34cqw;width:52cqw;height:54cqw"><img src="finka4.webp" alt="Кожаные ножны" style="--k:.08125cqw;--x:60;--y:240"></div>
+    <div class="ft" style="left:64cqw;top:34cqw;width:30cqw"><div class="n">01</div><b>Натуральная кожа</b></div>
+    <div class="ft" style="left:64cqw;top:51cqw;width:30cqw"><div class="n">02</div><b>Тиснение герба НКВД</b></div>
+    <div class="ft" style="left:64cqw;top:68cqw;width:30cqw"><div class="n">03</div><b>Ножны в комплекте</b></div>
+    <div class="st" style="left:7cqw;top:96cqw;width:86cqw"><div class="gn" style="font-size:9cqw">Нож + ножны</div><div class="lb">100% ручная работа · Ворсма</div></div>
+  </div>
+
+  <!-- 5. Уход и подарок -->
+  <div class="slide">
+    <div class="brand">Мастерская Бессонова</div><div class="pg">05 / 05</div>
+    <div class="ttl" style="top:13cqw">Уход</div>
+    <div class="sub" style="top:27.5cqw">Как сохранить нож</div>
+    <div class="ring" style="left:7cqw;top:36cqw">1</div><div class="abs" style="left:23cqw;top:37cqw"><div style="font:400 5.4cqw/1.1 Georgia,serif;color:#fff">Протереть насухо</div><div style="font:400 2.9cqw/1.3 Helvetica Neue,Arial,sans-serif;color:#aaa49a;margin-top:.8cqw">после использования</div></div>
+    <div class="ring" style="left:7cqw;top:51cqw">2</div><div class="abs" style="left:23cqw;top:52cqw"><div style="font:400 5.4cqw/1.1 Georgia,serif;color:#fff">Хранить в ножнах</div><div style="font:400 2.9cqw/1.3 Helvetica Neue,Arial,sans-serif;color:#aaa49a;margin-top:.8cqw">кожаные ножны в комплекте</div></div>
+    <div class="ring" style="left:7cqw;top:66cqw">3</div><div class="abs" style="left:23cqw;top:67cqw"><div style="font:400 5.4cqw/1.1 Georgia,serif;color:#fff">В сухом месте</div><div style="font:400 2.9cqw/1.3 Helvetica Neue,Arial,sans-serif;color:#aaa49a;margin-top:.8cqw">на ноже антикоррозийное покрытие</div></div>
+    <div class="panel" style="left:7cqw;top:88cqw;width:36cqw;height:36.5cqw"><img src="finka2.webp" alt="Литьё из латуни" style="--k:.1161cqw;--x:440;--y:410"></div>
+    <div class="abs" style="left:48cqw;top:90cqw;width:46cqw"><div class="sub" style="position:static">Подарок</div><div style="font:400 6.4cqw/1.1 Georgia,serif;color:#fff;margin-top:2cqw">Нож с гербом и звёздами</div><div style="font:400 2.9cqw/1.35 Helvetica Neue,Arial,sans-serif;color:#aaa49a;margin-top:2cqw">Ножны из натуральной кожи, авторское литьё из латуни, 100% ручная работа.</div></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var src=[].slice.call(document.querySelectorAll('#src .slide'));
+  var thumbs=document.getElementById('thumbs'),track=document.getElementById('track'),dots=document.getElementById('dots');
+  var i=0,btns=[],dts=[],lock=false;
+  src.forEach(function(s,k){
+    var b=document.createElement('button');b.className='th';b.type='button';b.setAttribute('aria-label','Фото '+(k+1));
+    b.appendChild(s.cloneNode(true));
+    b.addEventListener('click',function(){go(k)});
+    thumbs.appendChild(b);btns.push(b);
+    track.appendChild(s.cloneNode(true));
+    var d=document.createElement('i');d.addEventListener('click',function(){go(k)});dots.appendChild(d);dts.push(d);
+  });
+  function mark(k){
+    i=k;
+    btns.forEach(function(b,j){b.classList.toggle('on',j===k)});
+    dts.forEach(function(d,j){d.classList.toggle('on',j===k)});
+  }
+  function go(k){
+    k=(k+src.length)%src.length;mark(k);
+    track.scrollTo({left:k*track.clientWidth,behavior:'smooth'});
+  }
+  track.addEventListener('scroll',function(){
+    var k=Math.round(track.scrollLeft/track.clientWidth);
+    if(k!==i&&k>=0&&k<src.length)mark(k);
+  },{passive:true});
+  document.getElementById('prev').onclick=function(){go(i-1)};
+  document.getElementById('next').onclick=function(){go(i+1)};
+  document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')go(i-1);if(e.key==='ArrowRight')go(i+1)});
+  // мышью перетаскивать тоже можно
+  var down=false,sx=0,sl=0,moved=false;
+  track.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse')return;down=true;moved=false;sx=e.clientX;sl=track.scrollLeft;track.style.scrollSnapType='none'});
+  window.addEventListener('pointermove',function(e){if(!down)return;var d=e.clientX-sx;if(Math.abs(d)>3)moved=true;track.scrollLeft=sl-d});
+  window.addEventListener('pointerup',function(e){if(!down)return;down=false;track.style.scrollSnapType='';var k=Math.round(track.scrollLeft/track.clientWidth);go(k)});
+  var q=location.hash.match(/s(\d)/);mark(0);if(q){setTimeout(function(){go(+q[1]-1)},50)}
+})();
+</script>
+</body>
+</html>
