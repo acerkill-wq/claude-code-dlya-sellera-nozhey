@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude Code для продавца ножей</title>
+<meta name="description" content="Как один человек с Claude Code ведёт Ozon, Wildberries, рекламу и отправки: карта автоматизации и план на 4 недели.">
+<style>
+:root{--bg:#0f1420;--card:#18202f;--tx:#eef2f8;--mut:#9aa7bd;--ac:#7c5cff;--ac2:#22d3a6;--wb:#cb11ab;--oz:#005bff;--line:rgba(124,92,255,.22)}
+@media (prefers-color-scheme:light){:root{--bg:#f4f6fb;--card:#fff;--tx:#141a29;--mut:#5b6780}}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.deck{height:100%;overflow-y:auto;scroll-snap-type:y mandatory}
+section{min-height:100vh;scroll-snap-align:start;padding:48px 24px 80px;display:flex;flex-direction:column;justify-content:center;max-width:1040px;margin:0 auto}
+h1{font-size:clamp(34px,6vw,62px);line-height:1.08;margin:0 0 18px}
+h2{font-size:clamp(26px,4vw,40px);margin:0 0 20px;line-height:1.15}
+p,li{font-size:clamp(16px,2vw,20px);line-height:1.5}
+.mut{color:var(--mut)}
+.grad{background:linear-gradient(90deg,var(--oz),var(--ac),var(--wb));-webkit-background-clip:text;background-clip:text;color:transparent}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.card{background:var(--card);border-radius:16px;padding:18px 20px;border:1px solid var(--line)}
+.card h3{margin:0 0 8px;font-size:19px}
+.card p,.card li{margin:0;font-size:15.5px;color:var(--mut)}
+.card ul{margin:0;padding-left:18px}
+.tag{display:inline-block;font-size:13px;padding:3px 10px;border-radius:99px;background:rgba(34,211,166,.15);color:var(--ac2);margin-bottom:10px}
+.tag.y{background:rgba(245,165,36,.16);color:#f5a524}
+.prompt{background:#0b0f19;color:#d8e1ff;border-radius:12px;padding:12px 14px;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:12px 0 0;white-space:pre-wrap}
+@media (prefers-color-scheme:light){.prompt{background:#eef0f8;color:#1c2340}}
+.big{font-size:clamp(38px,7vw,68px);font-weight:700;line-height:1.1}
+.steps{counter-reset:s;list-style:none;padding:0;margin:0}
+.steps li{counter-increment:s;margin:0 0 14px;padding-left:52px;position:relative}
+.steps li:before{content:counter(s);position:absolute;left:0;top:0;width:36px;height:36px;border-radius:50%;background:var(--ac);color:#fff;display:grid;place-items:center;font-weight:700;font-size:16px}
+.warn{border-left:4px solid #f5a524;padding-left:16px}
+table{width:100%;border-collapse:collapse;font-size:clamp(13.5px,1.7vw,16.5px)}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mut);font-weight:600}
+.lv{white-space:nowrap;font-weight:600}
+.lv.a{color:var(--ac2)}.lv.b{color:#6aa7ff}.lv.c{color:#f5a524}
+.loop{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.loop .n{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
+.loop .ar{color:var(--ac);font-size:20px}
+nav{position:fixed;right:14px;bottom:14px;display:flex;gap:8px}
+nav button{border:0;border-radius:10px;padding:10px 14px;background:var(--ac);color:#fff;font-size:16px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="deck" id="deck">
+
+<section>
+  <p class="mut">Продажа ножей на Ozon и Wildberries · работаете один</p>
+  <h1>Один человек с Claude Code работает <span class="grad">как небольшой отдел</span></h1>
+  <p class="mut">Карта: что отдать ИИ, что оставить себе, и с чего начать. Листайте стрелками или свайпом вниз.</p>
+</section>
+
+<section>
+  <h2>Что сейчас съедает время</h2>
+  <div class="grid">
+    <div class="card"><h3>Учёт в Excel</h3><p>Остатки, себестоимость, продажи по ножам вносятся и сверяются вручную.</p></div>
+    <div class="card"><h3>Карточки и SEO</h3><p>Заголовки, описания, характеристики отдельно под Ozon и WB. Фото и инфографика.</p></div>
+    <div class="card"><h3>Конкуренты и цены</h3><p>Заходить и смотреть руками, запоминать, сравнивать, решать, что менять.</p></div>
+    <div class="card"><h3>Реклама</h3><p>Яндекс Директ требует ежедневного ухода, ВКонтакте пока не даёт результата, другие каналы не пробованы.</p></div>
+    <div class="card"><h3>Отправки</h3><p>Из заказов вручную формируются списки, печатаются и клеятся наклейки.</p></div>
+    <div class="card"><h3>Отзывы и вопросы</h3><p>Ответы покупателям, разбор негатива, возвраты.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Это уже работает: опыт Академии Сметного Дела</h2>
+  <p class="mut">Тот же Claude Code уже ведёт у нас рутину онлайн-школы. Вашу задачу собираем из проверенных деталей.</p>
+  <div class="grid">
+    <div class="card"><span class="tag">Каждое утро в 9:00</span><h3>Отчёт за вчера приходит сам</h3><p>Он читает выгрузки из CRM и платформы, считает уникальных людей и каналы, пишет итог. Для вас то же самое: продажи, остатки, реклама за вчера.</p></div>
+    <div class="card"><span class="tag">Ежедневно</span><h3>Мониторинг рынка по расписанию</h3><p>Дважды в день он обходит сайты и каналы отрасли, отбирает важное и пишет дайджест. Так же можно обходить страницы конкурентов.</p></div>
+    <div class="card"><span class="tag">Выгрузки и таблицы</span><h3>Скрипты под наши данные</h3><p>Выгрузка по API на чтение, сегментация, очистка, отчёты в таблицы. Рутину пишет он, мы только проверяем.</p></div>
+    <div class="card"><span class="tag">Команда ролей</span><h3>Аналитик, копирайтер, SEO, дизайнер</h3><p>Отдельные помощники с инструкциями под задачу: тексты, SEO, макеты, корректор, критик перед запуском.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Карта автоматизации</h2>
+  <table>
+    <tr><th>Процесс</th><th>Что делает Claude Code</th><th>Уровень</th></tr>
+    <tr><td>Наклейки и отправки</td><td>Из выгрузки заказов собирает листы сборки и PDF этикеток нужного размера</td><td class="lv a">почти полностью</td></tr>
+    <tr><td>Учёт в Excel</td><td>Сводит продажи, остатки и себестоимость, считает прибыль по каждому ножу</td><td class="lv a">почти полностью</td></tr>
+    <tr><td>Утренняя сводка</td><td>Продажи, остатки, рекламные расходы за вчера, что требует внимания</td><td class="lv a">полностью</td></tr>
+    <tr><td>Карточки и SEO</td><td>Ключи, заголовки, описания, характеристики под Ozon и WB</td><td class="lv b">черновик, вы правите</td></tr>
+    <tr><td>Карточки с низким CTR</td><td>Находит слабые, предлагает гипотезы, фиксирует результат тестов</td><td class="lv b">черновик, вы решаете</td></tr>
+    <tr><td>Конкуренты и цены</td><td>Собирает публичные цены, рейтинг, фото, строит динамику</td><td class="lv b">сбор сам, решение ваше</td></tr>
+    <tr><td>Яндекс Директ</td><td>Разбор фраз, минус-слова, объявления, ДРР</td><td class="lv b">анализ сам, правки вы</td></tr>
+    <tr><td>Отзывы и вопросы</td><td>Черновики ответов, разбор причин возвратов</td><td class="lv c">помощник</td></tr>
+    <tr><td>ВКонтакте и новые каналы</td><td>Диагностика, идеи, тексты и креативы, план тестов</td><td class="lv c">помощник</td></tr>
+  </table>
+</section>
+
+<section>
+  <span class="tag">Отправки</span>
+  <h2>Конец ручных наклеек</h2>
+  <div class="loop">
+    <div class="n">Заказы за день (выгрузка или API)</div><span class="ar">→</span>
+    <div class="n">Сортировка по складам и типам</div><span class="ar">→</span>
+    <div class="n">Лист сборки и упаковочный лист</div><span class="ar">→</span>
+    <div class="n">PDF с этикетками под ваш принтер</div>
+  </div>
+  <div class="card" style="margin-top:20px">
+    <p>Вы один раз показываете размер наклейки, образец штрихкода и формат выгрузки. Claude Code пишет скрипт, который одним запуском формирует всё нужное к отправке. Скрипт остаётся у вас и работает без него.</p>
+    <div class="prompt">Вот выгрузка заказов FBS за сегодня и образец наклейки 58×40 мм. Сделай скрипт: лист сборки по артикулам и PDF этикеток по заказам, готовый к печати.</div>
+  </div>
+</section>
+
+<section>
+  <span class="tag">Учёт</span>
+  <h2>Excel остаётся, но ведёт его не вы</h2>
+  <div class="grid">
+    <div class="card"><h3>Единая таблица ножей</h3><p>Артикул, модель, сталь, длина клинка, закупка, вес, остатки. Один источник правды для карточек Ozon, WB, рекламы и этикеток.</p></div>
+    <div class="card"><h3>Прибыль по каждому ножу</h3><p>Продажа минус комиссия, логистика, возвраты, реклама, закупка. Сразу видно, какие модели убыточны.</p></div>
+    <div class="card"><h3>Когда докупать</h3><p>По скорости продаж считает точку заказа и размер партии, предупреждает до нуля остатка.</p></div>
+  </div>
+  <div class="prompt">Вот мой файл учёта и отчёт Ozon за месяц. Свяжи по артикулу, посчитай чистую прибыль по каждому ножу, выдели убыточные и те, что скоро закончатся.</div>
+</section>
+
+<section>
+  <span class="tag">Карточки и SEO</span>
+  <h2>Карточки, которые находят и по которым кликают</h2>
+  <div class="grid">
+    <div class="card"><h3>Ключи и тексты</h3><ul><li>Разбор запросов: «нож кухонный», «шеф-нож», «нож для рыбалки»</li><li>Заголовок и описание отдельно под Ozon и WB</li><li>Характеристики: сталь, твёрдость, длина клинка, рукоять</li></ul></div>
+    <div class="card"><h3>Единый стиль</h3><p>Один раз описываете бренд и правила. Все карточки выходят в одном тоне, без пустых слов вроде «отличный» и «высокое качество».</p></div>
+    <div class="card"><h3>Инфографика</h3><p>Тексты слайдов, ТЗ дизайнеру или готовые HTML-макеты: в чём нож лучше, как заточен, что в комплекте.</p></div>
+  </div>
+</section>
+
+<section>
+  <span class="tag">Низкий CTR</span>
+  <h2>Недельный цикл: слабые карточки подтягиваются сами</h2>
+  <div class="loop">
+    <div class="n">1. Выгрузка статистики карточек</div><span class="ar">→</span>
+    <div class="n">2. Список с CTR ниже порога</div><span class="ar">→</span>
+    <div class="n">3. Гипотезы: главное фото, заголовок, цена</div><span class="ar">→</span>
+    <div class="n">4. Новые варианты текстов и ТЗ на фото</div><span class="ar">→</span>
+    <div class="n">5. Замер через 7–14 дней</div>
+  </div>
+  <div class="card" style="margin-top:20px"><p>Все тесты записываются в таблицу: что меняли, когда, какой стал CTR. Через пару месяцев это ваша база знаний о том, что работает именно на ножах. Решение о смене фото и текста всегда за вами.</p></div>
+</section>
+
+<section>
+  <span class="tag">Конкуренты и цены</span>
+  <h2>Рынок под наблюдением без ручных обходов</h2>
+  <div class="grid">
+    <div class="card"><h3>Что собираем</h3><p>Цена, скидка, рейтинг, число отзывов, фото, заголовок у 10–20 ключевых конкурентов по публичным страницам.</p></div>
+    <div class="card"><h3>Что получаете</h3><p>Утренняя таблица изменений: кто снизил цену, у кого прыгнули отзывы, кто сменил главное фото. И короткая рекомендация.</p></div>
+    <div class="card"><h3>Правило</h3><p>Цену в кабинете меняете вы. ИИ предлагает и считает, не опускается ли цена ниже безубыточной.</p></div>
+  </div>
+  <div class="prompt">Вот ссылки на 15 конкурентов. Каждое утро собирай цену, рейтинг и отзывы, сравнивай со вчера и пиши, что изменилось и где мы теряем.</div>
+</section>
+
+<section>
+  <span class="tag">Реклама</span>
+  <h2>Директ, ВКонтакте и где ещё можно размещаться</h2>
+  <div class="grid">
+    <div class="card"><h3>Яндекс Директ</h3><p>Разбор поисковых фраз, минус-слова, слабые объявления, ДРР по модели. Видно, какие ножи окупают рекламу, а какие нет.</p></div>
+    <div class="card"><h3>ВКонтакте: почему не идёт</h3><p>Диагностика: аудитория, креативы, настройки, оффер. Важно проверить правила размещения: у ножей часто строгая модерация.</p></div>
+    <div class="card"><h3>Что ещё проверить</h3><ul><li>Реклама внутри Ozon и WB</li><li>Яндекс Маркет и Авито</li><li>Telegram-каналы и блогеры: охота, рыбалка, кухня</li><li>Свой сайт и Яндекс Поиск</li><li>Повторные продажи: подписчики, мессенджер</li></ul></div>
+  </div>
+  <p class="mut">Claude Code делает анализ и план тестов с бюджетом, а площадки выбираете вы.</p>
+</section>
+
+<section>
+  <span class="tag">Отзывы</span>
+  <h2>Покупатели получают ответ, вы экономите вечер</h2>
+  <div class="grid">
+    <div class="card"><h3>Черновики ответов</h3><p>Вежливо и по делу, в вашем стиле. Негатив отдельно с предложением решения. Публикуете после просмотра.</p></div>
+    <div class="card"><h3>Причины возвратов</h3><p>Группировка по ножам: тупой, не тот размер, ожидание не совпало с фото. Из этого рождаются правки карточек.</p></div>
+    <div class="card"><h3>Идеи для товара</h3><p>Что в отзывах просят чаще всего: ножны, подарочная упаковка, набор. Это ваши новые позиции.</p></div>
+  </div>
+</section>
+
+<section>
+  <span class="tag">Контент</span>
+  <h2>Видео и фото без студии</h2>
+  <p>В Академии Claude Code монтирует видео, режет вертикальные ролики, делает субтитры и заставки. Для ножей это короткие клипы «резка помидора», «нарезка за 5 секунд», «заточка». Их можно ставить на карточки Ozon и WB и пробовать как креатив для ВКонтакте и Директа.</p>
+</section>
+
+<section>
+  <h2>План на 4 недели</h2>
+  <ol class="steps">
+    <li><b>Неделя 1.</b> Учёт и сводка: единая таблица ножей, прибыль по артикулам, утренний отчёт.</li>
+    <li><b>Неделя 2.</b> Отправки: сбор заказов, лист сборки, PDF этикеток под принтер.</li>
+    <li><b>Неделя 3.</b> Карточки: SEO-тексты, цикл по низкому CTR, мониторинг конкурентов.</li>
+    <li><b>Неделя 4.</b> Реклама: разбор Директа, диагностика ВКонтакте, план тестов новых каналов.</li>
+  </ol>
+</section>
+
+<section>
+  <h2>Честно про ограничения</h2>
+  <div class="warn">
+    <ul>
+      <li>Ключи API кабинетов давайте только на <b>чтение</b>. Менять цены и публиковать карточки лучше самому.</li>
+      <li>Первые недели выборочно сверяйте цифры с кабинетами.</li>
+      <li>Сбор данных конкурентов только с публичных страниц и в рамках правил площадок.</li>
+      <li>Для ножей проверьте правила категорий Ozon, WB и рекламных площадок и требования закона к продаже и доставке. Это проверяете вы или юрист, а не ИИ.</li>
+      <li>Не передавайте посторонним ключи и доступы.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <p class="mut">С чего начать завтра</p>
+  <div class="big grad">Отправки или прибыль по ножам</div>
+  <p>Возьмите выгрузку заказов за один день и образец наклейки либо отчёт за прошлый месяц и файл учёта. Через вечер у вас будет первый готовый инструмент, который работает дальше сам.</p>
+</section>
+
+</div>
+<nav><button onclick="go(-1)" aria-label="Назад">↑</button><button onclick="go(1)" aria-label="Вперёд">↓</button></nav>
+<script>
+var d=document.getElementById('deck');
+function go(n){d.scrollBy({top:n*window.innerHeight,behavior:'smooth'})}
+document.addEventListener('keydown',function(e){
+  if(['ArrowDown','PageDown',' ','ArrowRight'].indexOf(e.key)>-1){e.preventDefault();go(1)}
+  if(['ArrowUp','PageUp','ArrowLeft'].indexOf(e.key)>-1){e.preventDefault();go(-1)}
+});
+</script>
+</body>
+</html>
