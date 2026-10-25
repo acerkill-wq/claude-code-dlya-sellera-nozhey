@@ -4,26 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Claude Code для продавца ножей</title>
-<meta name="description" content="Как один человек с Claude Code ведёт Ozon, Wildberries, рекламу и отправки: карта автоматизации и план на 4 недели.">
+<meta name="description" content="Как один человек с Claude Code ведёт Ozon, Wildberries, рекламу и отправки: до и после, калькулятор времени и план на 4 недели.">
 <style>
-:root{--bg:#0f1420;--card:#18202f;--tx:#eef2f8;--mut:#9aa7bd;--ac:#7c5cff;--ac2:#22d3a6;--wb:#cb11ab;--oz:#005bff;--line:rgba(124,92,255,.22)}
+:root{--bg:#0f1420;--card:#18202f;--tx:#eef2f8;--mut:#9aa7bd;--ac:#7c5cff;--ac2:#22d3a6;--wb:#cb11ab;--oz:#005bff;--line:rgba(124,92,255,.25);--bad:#ff5d6c;--steel:#c7d0dd}
 @media (prefers-color-scheme:light){:root{--bg:#f4f6fb;--card:#fff;--tx:#141a29;--mut:#5b6780}}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 .deck{height:100%;overflow-y:auto;scroll-snap-type:y mandatory}
-section{min-height:100vh;scroll-snap-align:start;padding:48px 24px 80px;display:flex;flex-direction:column;justify-content:center;max-width:1040px;margin:0 auto}
-h1{font-size:clamp(34px,6vw,62px);line-height:1.08;margin:0 0 18px}
-h2{font-size:clamp(26px,4vw,40px);margin:0 0 20px;line-height:1.15}
+section{min-height:100vh;scroll-snap-align:start;padding:44px 22px 84px;display:flex;flex-direction:column;justify-content:center;max-width:1080px;margin:0 auto;position:relative}
+h1{font-size:clamp(34px,6vw,62px);line-height:1.06;margin:0 0 16px}
+h2{font-size:clamp(25px,4vw,38px);margin:0 0 18px;line-height:1.15}
 p,li{font-size:clamp(16px,2vw,20px);line-height:1.5}
 .mut{color:var(--mut)}
 .grad{background:linear-gradient(90deg,var(--oz),var(--ac),var(--wb));-webkit-background-clip:text;background-clip:text;color:transparent}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .card{background:var(--card);border-radius:16px;padding:18px 20px;border:1px solid var(--line)}
 .card h3{margin:0 0 8px;font-size:19px}
 .card p,.card li{margin:0;font-size:15.5px;color:var(--mut)}
 .card ul{margin:0;padding-left:18px}
 .tag{display:inline-block;font-size:13px;padding:3px 10px;border-radius:99px;background:rgba(34,211,166,.15);color:var(--ac2);margin-bottom:10px}
-.tag.y{background:rgba(245,165,36,.16);color:#f5a524}
+.pill{display:inline-block;font-size:13px;font-weight:700;padding:4px 12px;border-radius:99px;color:#fff;margin-right:6px}
+.pill.oz{background:var(--oz)}.pill.wb{background:var(--wb)}
 .prompt{background:#0b0f19;color:#d8e1ff;border-radius:12px;padding:12px 14px;font:14px/1.5 ui-monospace,Menlo,Consolas,monospace;margin:12px 0 0;white-space:pre-wrap}
 @media (prefers-color-scheme:light){.prompt{background:#eef0f8;color:#1c2340}}
 .big{font-size:clamp(38px,7vw,68px);font-weight:700;line-height:1.1}
@@ -34,150 +35,366 @@ p,li{font-size:clamp(16px,2vw,20px);line-height:1.5}
 table{width:100%;border-collapse:collapse;font-size:clamp(13.5px,1.7vw,16.5px)}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 th{color:var(--mut);font-weight:600}
-.lv{white-space:nowrap;font-weight:600}
-.lv.a{color:var(--ac2)}.lv.b{color:#6aa7ff}.lv.c{color:#f5a524}
+.lv{white-space:nowrap;font-weight:600}.lv.a{color:var(--ac2)}.lv.b{color:#6aa7ff}.lv.c{color:#f5a524}
 .loop{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .loop .n{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:15px}
 .loop .ar{color:var(--ac);font-size:20px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:700px){.two{grid-template-columns:1fr}}
+.ph{border-radius:16px;overflow:hidden;border:1px solid var(--line);background:var(--card)}
+.ph svg{display:block;width:100%;height:auto}
+.cap{font-size:14px;color:var(--mut);margin:8px 2px 0}
+.cap b{color:var(--tx)}
+.hero{position:absolute;inset:0;overflow:hidden;z-index:-1;opacity:.55}
+.hero svg{position:absolute;right:-40px;bottom:-10px;width:70%;max-width:760px}
+.kpi{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}
+.kpi div{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 18px}
+.kpi b{display:block;font-size:30px}
+.sl{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;margin:0 0 12px}
+.sl label{font-size:15px}.sl output{font-weight:700;color:var(--ac2)}
+.sl input{grid-column:1/3;width:100%;accent-color:var(--ac)}
+.bar{display:flex;align-items:center;gap:10px;margin:7px 0;font-size:14px}
+.bar span.l{width:150px;color:var(--mut)}
+.bar .t{flex:1;background:rgba(124,92,255,.12);border-radius:8px;height:22px;position:relative;overflow:hidden}
+.bar .b1,.bar .b2{position:absolute;left:0;top:0;height:50%}
+.bar .b1{background:var(--bad)}.bar .b2{top:50%;background:var(--ac2)}
+.bar span.v{width:90px;text-align:right}
 nav{position:fixed;right:14px;bottom:14px;display:flex;gap:8px}
 nav button{border:0;border-radius:10px;padding:10px 14px;background:var(--ac);color:#fff;font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
+
+<!-- Библиотека иллюстраций: нож рисуется один раз и используется много раз -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="blade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f7fb"/><stop offset=".55" stop-color="#b9c4d4"/><stop offset="1" stop-color="#8795aa"/></linearGradient>
+    <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5a35"/><stop offset="1" stop-color="#4e2f18"/></linearGradient>
+    <linearGradient id="bgg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a3350"/><stop offset="1" stop-color="#1a2034"/></linearGradient>
+    <symbol id="chef" viewBox="0 0 400 90">
+      <path d="M6 58 C60 6 190 4 262 36 L262 62 L40 62 C24 62 12 62 6 58Z" fill="url(#blade)"/>
+      <path d="M6 58 C40 62 150 62 262 62" stroke="#6f7d93" stroke-width="2" fill="none"/>
+      <rect x="262" y="34" width="14" height="30" rx="3" fill="#a9b4c4"/>
+      <path d="M276 36 H380 Q396 36 396 49 Q396 62 380 62 H276Z" fill="url(#wood)"/>
+      <circle cx="304" cy="49" r="4" fill="#d9dde4"/><circle cx="340" cy="49" r="4" fill="#d9dde4"/>
+    </symbol>
+    <symbol id="hunt" viewBox="0 0 400 90">
+      <path d="M8 46 L230 30 Q262 34 262 46 Q262 58 230 62 Z" fill="url(#blade)"/>
+      <rect x="258" y="26" width="10" height="40" rx="3" fill="#c9a24a"/>
+      <path d="M268 32 H372 Q394 32 394 46 Q394 60 372 60 H268Z" fill="#2c3a2e"/>
+      <path d="M280 36 V56 M296 36 V56 M312 36 V56 M328 36 V56 M344 36 V56" stroke="#4d6350" stroke-width="3"/>
+    </symbol>
+    <symbol id="santoku" viewBox="0 0 400 90">
+      <path d="M6 28 L250 26 L262 34 L262 64 L40 64 C20 64 8 52 6 28Z" fill="url(#blade)"/>
+      <circle cx="32" cy="36" r="3" fill="#6f7d93"/><circle cx="52" cy="36" r="3" fill="#6f7d93"/>
+      <rect x="262" y="34" width="12" height="30" rx="3" fill="#a9b4c4"/>
+      <path d="M274 36 H382 Q396 36 396 49 Q396 62 382 62 H274Z" fill="#20242e"/>
+    </symbol>
+  </defs>
+</svg>
+
 <div class="deck" id="deck">
 
+<!-- 1 -->
 <section>
-  <p class="mut">Продажа ножей на Ozon и Wildberries · работаете один</p>
+  <div class="hero"><svg viewBox="0 0 400 300"><use href="#chef" x="0" y="20" width="400" height="90" transform="rotate(-14 200 60)"/><use href="#hunt" x="0" y="120" width="400" height="90" transform="rotate(8 200 160)"/><use href="#santoku" x="0" y="215" width="400" height="90" transform="rotate(-5 200 250)"/></svg></div>
+  <p><span class="pill oz">Ozon</span><span class="pill wb">Wildberries</span></p>
   <h1>Один человек с Claude Code работает <span class="grad">как небольшой отдел</span></h1>
-  <p class="mut">Карта: что отдать ИИ, что оставить себе, и с чего начать. Листайте стрелками или свайпом вниз.</p>
+  <p class="mut">Как отдать ИИ наклейки, учёт, карточки и аналитику, а себе оставить решения и товар. Листайте стрелками или свайпом вниз.</p>
 </section>
 
+<!-- 2 : сколько времени -->
 <section>
-  <h2>Что сейчас съедает время</h2>
-  <div class="grid">
-    <div class="card"><h3>Учёт в Excel</h3><p>Остатки, себестоимость, продажи по ножам вносятся и сверяются вручную.</p></div>
-    <div class="card"><h3>Карточки и SEO</h3><p>Заголовки, описания, характеристики отдельно под Ozon и WB. Фото и инфографика.</p></div>
-    <div class="card"><h3>Конкуренты и цены</h3><p>Заходить и смотреть руками, запоминать, сравнивать, решать, что менять.</p></div>
-    <div class="card"><h3>Реклама</h3><p>Яндекс Директ требует ежедневного ухода, ВКонтакте пока не даёт результата, другие каналы не пробованы.</p></div>
-    <div class="card"><h3>Отправки</h3><p>Из заказов вручную формируются списки, печатаются и клеятся наклейки.</p></div>
-    <div class="card"><h3>Отзывы и вопросы</h3><p>Ответы покупателям, разбор негатива, возвраты.</p></div>
+  <span class="tag">Главное</span>
+  <h2>Сколько времени это экономит</h2>
+  <p class="mut">Подвигайте ползунки под свою реальность. Расчёт ориентировочный: в основе допущения, которые мы уточним по вашим реальным цифрам за первую неделю.</p>
+  <div class="two">
+    <div class="card">
+      <div class="sl"><label>Заказов в день</label><output id="o1">40</output><input id="i1" type="range" min="5" max="200" value="40"></div>
+      <div class="sl"><label>Минут на заказ: этикетка и лист сборки вручную</label><output id="o2">1.5</output><input id="i2" type="range" min="0.5" max="4" step="0.5" value="1.5"></div>
+      <div class="sl"><label>Карточек в неделю: создать или обновить</label><output id="o3">8</output><input id="i3" type="range" min="1" max="30" value="8"></div>
+      <div class="sl"><label>Часов в неделю: учёт в Excel и сверки</label><output id="o4">4</output><input id="i4" type="range" min="0" max="15" value="4"></div>
+      <div class="sl"><label>Часов в неделю: конкуренты, цены, реклама</label><output id="o5">6</output><input id="i5" type="range" min="0" max="20" value="6"></div>
+    </div>
+    <div>
+      <div class="kpi"><div><b id="k1">0</b><span class="mut">часов в неделю</span></div><div><b id="k2">0</b><span class="mut">часов в месяц</span></div><div><b id="k3">0</b><span class="mut">рабочих дней в год</span></div></div>
+      <div id="bars"></div>
+      <p class="cap"><b>Допущения расчёта:</b> отправки сокращаются до 15% от ручного времени, учёт до 15%, карточки с 40 до 12 минут (черновик ИИ, вы правите), конкуренты и реклама до 35%. Красный: было. Зелёный: может быть.</p>
+    </div>
   </div>
 </section>
 
+<!-- 3 : боли -->
 <section>
-  <h2>Это уже работает: опыт Академии Сметного Дела</h2>
-  <p class="mut">Тот же Claude Code уже ведёт у нас рутину онлайн-школы. Вашу задачу собираем из проверенных деталей.</p>
+  <h2>Куда уходит неделя сейчас</h2>
   <div class="grid">
-    <div class="card"><span class="tag">Каждое утро в 9:00</span><h3>Отчёт за вчера приходит сам</h3><p>Он читает выгрузки из CRM и платформы, считает уникальных людей и каналы, пишет итог. Для вас то же самое: продажи, остатки, реклама за вчера.</p></div>
-    <div class="card"><span class="tag">Ежедневно</span><h3>Мониторинг рынка по расписанию</h3><p>Дважды в день он обходит сайты и каналы отрасли, отбирает важное и пишет дайджест. Так же можно обходить страницы конкурентов.</p></div>
-    <div class="card"><span class="tag">Выгрузки и таблицы</span><h3>Скрипты под наши данные</h3><p>Выгрузка по API на чтение, сегментация, очистка, отчёты в таблицы. Рутину пишет он, мы только проверяем.</p></div>
-    <div class="card"><span class="tag">Команда ролей</span><h3>Аналитик, копирайтер, SEO, дизайнер</h3><p>Отдельные помощники с инструкциями под задачу: тексты, SEO, макеты, корректор, критик перед запуском.</p></div>
+    <div class="card"><h3>📋 Учёт в Excel</h3><p>Остатки, себестоимость и продажи вносятся и сверяются руками.</p></div>
+    <div class="card"><h3>🏷 Отправки и наклейки</h3><p>Заказы вручную в список, печать, наклеивание. Каждый день.</p></div>
+    <div class="card"><h3>✍️ Карточки и SEO</h3><p>Заголовки, описания, характеристики отдельно для Ozon и WB.</p></div>
+    <div class="card"><h3>🔎 Конкуренты и цены</h3><p>Заходить, смотреть, запоминать, сравнивать.</p></div>
+    <div class="card"><h3>📣 Реклама</h3><p>Директ требует ухода, ВКонтакте пока не даёт результата.</p></div>
+    <div class="card"><h3>💬 Отзывы</h3><p>Ответы покупателям, разбор негатива и возвратов.</p></div>
   </div>
 </section>
 
+<!-- 4 : карточка до/после -->
 <section>
-  <h2>Карта автоматизации</h2>
-  <table>
-    <tr><th>Процесс</th><th>Что делает Claude Code</th><th>Уровень</th></tr>
-    <tr><td>Наклейки и отправки</td><td>Из выгрузки заказов собирает листы сборки и PDF этикеток нужного размера</td><td class="lv a">почти полностью</td></tr>
-    <tr><td>Учёт в Excel</td><td>Сводит продажи, остатки и себестоимость, считает прибыль по каждому ножу</td><td class="lv a">почти полностью</td></tr>
-    <tr><td>Утренняя сводка</td><td>Продажи, остатки, рекламные расходы за вчера, что требует внимания</td><td class="lv a">полностью</td></tr>
-    <tr><td>Карточки и SEO</td><td>Ключи, заголовки, описания, характеристики под Ozon и WB</td><td class="lv b">черновик, вы правите</td></tr>
-    <tr><td>Карточки с низким CTR</td><td>Находит слабые, предлагает гипотезы, фиксирует результат тестов</td><td class="lv b">черновик, вы решаете</td></tr>
-    <tr><td>Конкуренты и цены</td><td>Собирает публичные цены, рейтинг, фото, строит динамику</td><td class="lv b">сбор сам, решение ваше</td></tr>
-    <tr><td>Яндекс Директ</td><td>Разбор фраз, минус-слова, объявления, ДРР</td><td class="lv b">анализ сам, правки вы</td></tr>
-    <tr><td>Отзывы и вопросы</td><td>Черновики ответов, разбор причин возвратов</td><td class="lv c">помощник</td></tr>
-    <tr><td>ВКонтакте и новые каналы</td><td>Диагностика, идеи, тексты и креативы, план тестов</td><td class="lv c">помощник</td></tr>
-  </table>
+  <span class="tag">Карточки</span>
+  <h2>Было и может быть: одна и та же карточка ножа</h2>
+  <div class="two">
+    <div>
+      <div class="ph">
+        <svg viewBox="0 0 360 440" role="img" aria-label="Карточка товара до: простое фото и общий заголовок">
+          <rect width="360" height="440" fill="#f2f3f6"/>
+          <rect x="0" y="0" width="360" height="270" fill="#e4e7ee"/>
+          <g transform="translate(40 120) rotate(-8 140 45)"><use href="#chef" width="290" height="65"/></g>
+          <text x="18" y="298" font-size="22" font-weight="700" fill="#141a29" font-family="Arial">1 290 ₽</text>
+          <text x="18" y="326" font-size="15" fill="#3b4558" font-family="Arial">Нож кухонный стальной</text>
+          <text x="18" y="350" font-size="13" fill="#7a8396" font-family="Arial">★ 4,1 · 12 отзывов</text>
+          <rect x="18" y="372" width="324" height="44" rx="10" fill="#ffe3e6"/>
+          <text x="32" y="400" font-size="15" font-weight="700" fill="#c0283a" font-family="Arial">CTR 1,2% · мало кликов</text>
+        </svg>
+      </div>
+      <p class="cap"><b>Было:</b> фото без пояснений, общий заголовок, нет характеристик. Покупатель пролистывает.</p>
+    </div>
+    <div>
+      <div class="ph">
+        <svg viewBox="0 0 360 440" role="img" aria-label="Карточка товара после: инфографика и SEO-заголовок">
+          <rect width="360" height="440" fill="#f2f3f6"/>
+          <rect x="0" y="0" width="360" height="270" fill="url(#bgg)"/>
+          <g transform="translate(36 130) rotate(-8 140 45)"><use href="#chef" width="290" height="65"/></g>
+          <rect x="14" y="14" width="190" height="30" rx="15" fill="#22d3a6"/><text x="26" y="34" font-size="14" font-weight="700" fill="#06231b" font-family="Arial">Сталь 95Х18 · 58 HRC</text>
+          <rect x="196" y="190" width="150" height="30" rx="15" fill="#7c5cff"/><text x="210" y="210" font-size="14" font-weight="700" fill="#fff" font-family="Arial">Клинок 20 см</text>
+          <rect x="14" y="228" width="170" height="30" rx="15" fill="#f5a524"/><text x="26" y="248" font-size="14" font-weight="700" fill="#2b1c00" font-family="Arial">Для мяса и овощей</text>
+          <text x="18" y="298" font-size="22" font-weight="700" fill="#141a29" font-family="Arial">1 490 ₽</text>
+          <text x="18" y="326" font-size="14" fill="#3b4558" font-family="Arial">Шеф-нож кухонный 20 см, сталь 95Х18</text>
+          <text x="18" y="350" font-size="13" fill="#7a8396" font-family="Arial">★ 4,8 · 214 отзывов</text>
+          <rect x="18" y="372" width="324" height="44" rx="10" fill="#d5f7ec"/>
+          <text x="32" y="400" font-size="15" font-weight="700" fill="#0b7a5b" font-family="Arial">CTR 3,4% · в 2–3 раза больше кликов</text>
+        </svg>
+      </div>
+      <p class="cap"><b>Может быть:</b> главное на фото, заголовок с ключами, характеристики. Цифры на картинках: иллюстрация возможного эффекта, не обещание.</p>
+    </div>
+  </div>
 </section>
 
+<!-- 5 : цикл CTR -->
+<section>
+  <span class="tag">Низкий CTR</span>
+  <h2>Недельный цикл: слабые карточки подтягиваются</h2>
+  <div class="loop">
+    <div class="n">1. Выгрузка статистики</div><span class="ar">→</span>
+    <div class="n">2. Список с CTR ниже порога</div><span class="ar">→</span>
+    <div class="n">3. Гипотезы: фото, заголовок, цена</div><span class="ar">→</span>
+    <div class="n">4. Новые тексты и ТЗ на фото</div><span class="ar">→</span>
+    <div class="n">5. Замер через 7–14 дней</div>
+  </div>
+  <div class="ph" style="margin-top:20px">
+    <svg viewBox="0 0 800 220" role="img" aria-label="График CTR до и после правок">
+      <rect width="800" height="220" fill="var(--card)"/>
+      <g font-family="Arial" font-size="13" fill="#9aa7bd">
+        <text x="20" y="28">CTR карточек, %</text>
+        <text x="60" y="206">Карточка А</text><text x="230" y="206">Карточка Б</text><text x="400" y="206">Карточка В</text><text x="570" y="206">Карточка Г</text>
+      </g>
+      <g>
+        <rect x="60" y="150" width="50" height="40" fill="#ff5d6c"/><rect x="116" y="110" width="50" height="80" fill="#22d3a6"/>
+        <rect x="230" y="160" width="50" height="30" fill="#ff5d6c"/><rect x="286" y="100" width="50" height="90" fill="#22d3a6"/>
+        <rect x="400" y="135" width="50" height="55" fill="#ff5d6c"/><rect x="456" y="85" width="50" height="105" fill="#22d3a6"/>
+        <rect x="570" y="145" width="50" height="45" fill="#ff5d6c"/><rect x="626" y="145" width="50" height="45" fill="#9aa7bd"/>
+      </g>
+      <g font-family="Arial" font-size="12" fill="#9aa7bd"><text x="704" y="60">до</text><text x="704" y="80">после</text><text x="704" y="100">не помогло</text></g>
+      <g font-family="Arial" font-size="12"><rect x="690" y="51" width="8" height="8" fill="#ff5d6c"/><rect x="690" y="71" width="8" height="8" fill="#22d3a6"/><rect x="690" y="91" width="8" height="8" fill="#9aa7bd"/></g>
+    </svg>
+  </div>
+  <p class="cap">Схема-пример. Все тесты фиксируются в таблице: что меняли, когда, какой стал CTR. Через пару месяцев это ваша база знаний о том, что работает именно на ножах. Решает всегда вы.</p>
+</section>
+
+<!-- 6 : инфографика ассортимент -->
+<section>
+  <span class="tag">Ассортимент</span>
+  <h2>Каждой модели свои слайды и свои слова</h2>
+  <div class="grid">
+    <div class="card"><div class="ph"><svg viewBox="0 0 400 130"><rect width="400" height="130" fill="url(#bgg)"/><g transform="translate(5 18) rotate(-4 200 45)"><use href="#chef" width="390" height="90"/></g></svg></div><h3 style="margin-top:12px">Шеф-нож</h3><p>Ключи: нож шеф, нож кухонный профессиональный. Акцент: сталь, баланс, универсальность.</p></div>
+    <div class="card"><div class="ph"><svg viewBox="0 0 400 130"><rect width="400" height="130" fill="url(#bgg)"/><g transform="translate(5 18) rotate(3 200 45)"><use href="#hunt" width="390" height="90"/></g></svg></div><h3 style="margin-top:12px">Туристический и охотничий</h3><p>Ключи: нож для охоты, для рыбалки, туристический. Акцент: ножны, нескользящая рукоять, подарок.</p></div>
+    <div class="card"><div class="ph"><svg viewBox="0 0 400 130"><rect width="400" height="130" fill="url(#bgg)"/><g transform="translate(5 18)"><use href="#santoku" width="390" height="90"/></g></svg></div><h3 style="margin-top:12px">Сантоку</h3><p>Ключи: нож сантоку, японский нож. Акцент: тонкая нарезка, лёгкость, набор.</p></div>
+  </div>
+  <p class="cap">Рисунки ножей условные. Реальные фото ваших ножей Claude Code встроит в макеты слайдов и проверит, что тексты совпадают с характеристиками.</p>
+</section>
+
+<!-- 7 : отправки -->
 <section>
   <span class="tag">Отправки</span>
   <h2>Конец ручных наклеек</h2>
   <div class="loop">
-    <div class="n">Заказы за день (выгрузка или API)</div><span class="ar">→</span>
-    <div class="n">Сортировка по складам и типам</div><span class="ar">→</span>
-    <div class="n">Лист сборки и упаковочный лист</div><span class="ar">→</span>
-    <div class="n">PDF с этикетками под ваш принтер</div>
+    <div class="n">Заказы за день</div><span class="ar">→</span>
+    <div class="n">Сортировка по складам</div><span class="ar">→</span>
+    <div class="n">Лист сборки</div><span class="ar">→</span>
+    <div class="n">PDF этикеток под принтер</div>
   </div>
-  <div class="card" style="margin-top:20px">
-    <p>Вы один раз показываете размер наклейки, образец штрихкода и формат выгрузки. Claude Code пишет скрипт, который одним запуском формирует всё нужное к отправке. Скрипт остаётся у вас и работает без него.</p>
-    <div class="prompt">Вот выгрузка заказов FBS за сегодня и образец наклейки 58×40 мм. Сделай скрипт: лист сборки по артикулам и PDF этикеток по заказам, готовый к печати.</div>
+  <div class="two" style="margin-top:20px">
+    <div class="ph">
+      <svg viewBox="0 0 380 240" role="img" aria-label="Образец листа с этикетками">
+        <rect width="380" height="240" fill="#eef0f5"/>
+        <g font-family="Arial">
+          <g transform="translate(14 14)"><rect width="170" height="100" rx="6" fill="#fff" stroke="#c8cdd8"/><g fill="#141a29"><rect x="10" y="12" width="3" height="40"/><rect x="16" y="12" width="1.5" height="40"/><rect x="20" y="12" width="4" height="40"/><rect x="27" y="12" width="2" height="40"/><rect x="32" y="12" width="3" height="40"/><rect x="38" y="12" width="1.5" height="40"/><rect x="43" y="12" width="4" height="40"/><rect x="50" y="12" width="2" height="40"/><rect x="55" y="12" width="3" height="40"/><rect x="61" y="12" width="2" height="40"/><rect x="66" y="12" width="4" height="40"/></g><text x="10" y="70" font-size="12" font-weight="700" fill="#141a29">Нож шеф 20 см</text><text x="10" y="86" font-size="10" fill="#5b6780">Артикул NZ-0412 · заказ 8841</text></g>
+          <g transform="translate(196 14)"><rect width="170" height="100" rx="6" fill="#fff" stroke="#c8cdd8"/><g fill="#141a29"><rect x="10" y="12" width="2" height="40"/><rect x="15" y="12" width="4" height="40"/><rect x="22" y="12" width="1.5" height="40"/><rect x="27" y="12" width="3" height="40"/><rect x="33" y="12" width="2" height="40"/><rect x="38" y="12" width="4" height="40"/><rect x="45" y="12" width="1.5" height="40"/><rect x="50" y="12" width="3" height="40"/><rect x="56" y="12" width="2" height="40"/><rect x="61" y="12" width="4" height="40"/></g><text x="10" y="70" font-size="12" font-weight="700" fill="#141a29">Нож охотничий</text><text x="10" y="86" font-size="10" fill="#5b6780">Артикул NZ-0107 · заказ 8842</text></g>
+          <g transform="translate(14 126)"><rect width="170" height="100" rx="6" fill="#fff" stroke="#c8cdd8"/><g fill="#141a29"><rect x="10" y="12" width="3" height="40"/><rect x="16" y="12" width="2" height="40"/><rect x="21" y="12" width="4" height="40"/><rect x="28" y="12" width="1.5" height="40"/><rect x="33" y="12" width="3" height="40"/><rect x="39" y="12" width="2" height="40"/><rect x="44" y="12" width="4" height="40"/><rect x="51" y="12" width="1.5" height="40"/><rect x="56" y="12" width="3" height="40"/></g><text x="10" y="70" font-size="12" font-weight="700" fill="#141a29">Сантоку 18 см</text><text x="10" y="86" font-size="10" fill="#5b6780">Артикул NZ-0233 · заказ 8843</text></g>
+          <g transform="translate(196 126)"><rect width="170" height="100" rx="6" fill="#fff" stroke="#c8cdd8" stroke-dasharray="4 3"/><text x="85" y="56" font-size="12" text-anchor="middle" fill="#9aa7bd">ещё 37 этикеток…</text></g>
+        </g>
+      </svg>
+    </div>
+    <div class="card">
+      <h3>Что вы получаете утром</h3>
+      <ul>
+        <li>Один PDF со всеми этикетками, готовый к печати</li>
+        <li>Лист сборки: сколько каких ножей достать со склада</li>
+        <li>Упаковочный лист и список проблемных заказов</li>
+      </ul>
+      <div class="prompt">Вот выгрузка заказов FBS за сегодня и образец наклейки 58×40 мм. Сделай скрипт: лист сборки по артикулам и PDF этикеток, готовый к печати.</div>
+      <p class="mut" style="margin-top:10px">Этикетка на рисунке образец. Реальный формат и штрихкоды берутся из ваших заказов и требований площадки.</p>
+    </div>
   </div>
 </section>
 
+<!-- 8 : учёт -->
 <section>
   <span class="tag">Учёт</span>
   <h2>Excel остаётся, но ведёт его не вы</h2>
-  <div class="grid">
-    <div class="card"><h3>Единая таблица ножей</h3><p>Артикул, модель, сталь, длина клинка, закупка, вес, остатки. Один источник правды для карточек Ozon, WB, рекламы и этикеток.</p></div>
-    <div class="card"><h3>Прибыль по каждому ножу</h3><p>Продажа минус комиссия, логистика, возвраты, реклама, закупка. Сразу видно, какие модели убыточны.</p></div>
-    <div class="card"><h3>Когда докупать</h3><p>По скорости продаж считает точку заказа и размер партии, предупреждает до нуля остатка.</p></div>
+  <div class="ph">
+    <svg viewBox="0 0 800 260" role="img" aria-label="Прибыль по моделям ножей">
+      <rect width="800" height="260" fill="var(--card)"/>
+      <g font-family="Arial" font-size="13" fill="#9aa7bd"><text x="20" y="26">Чистая прибыль за месяц по моделям, ₽ (пример)</text>
+      <line x1="170" y1="40" x2="170" y2="235" stroke="#9aa7bd" opacity=".4"/>
+      <text x="20" y="68">Шеф-нож 20 см</text><text x="20" y="108">Сантоку 18 см</text><text x="20" y="148">Охотничий</text><text x="20" y="188">Набор из 3 ножей</text><text x="20" y="228">Туристический</text></g>
+      <rect x="170" y="52" width="480" height="24" rx="5" fill="#22d3a6"/><text x="660" y="70" font-family="Arial" font-size="13" fill="#eef2f8">48 200</text>
+      <rect x="170" y="92" width="330" height="24" rx="5" fill="#22d3a6"/><text x="510" y="110" font-family="Arial" font-size="13" fill="#eef2f8">33 100</text>
+      <rect x="170" y="132" width="170" height="24" rx="5" fill="#22d3a6"/><text x="350" y="150" font-family="Arial" font-size="13" fill="#eef2f8">17 400</text>
+      <rect x="170" y="172" width="90" height="24" rx="5" fill="#f5a524"/><text x="270" y="190" font-family="Arial" font-size="13" fill="#eef2f8">8 900</text>
+      <rect x="120" y="212" width="50" height="24" rx="5" fill="#ff5d6c"/><text x="40" y="244" font-family="Arial" font-size="13" fill="#ff5d6c" transform="translate(70 -20)">−5 300: убыточно</text>
+    </svg>
   </div>
-  <div class="prompt">Вот мой файл учёта и отчёт Ozon за месяц. Свяжи по артикулу, посчитай чистую прибыль по каждому ножу, выдели убыточные и те, что скоро закончатся.</div>
+  <div class="grid" style="margin-top:14px">
+    <div class="card"><h3>Единая таблица ножей</h3><p>Артикул, сталь, длина клинка, закупка, остатки. Один источник правды для карточек, рекламы и этикеток.</p></div>
+    <div class="card"><h3>Прибыль по каждой модели</h3><p>Продажа минус комиссия, логистика, возвраты, реклама, закупка. Видно убыточные.</p></div>
+    <div class="card"><h3>Когда докупать</h3><p>По скорости продаж считает точку заказа и предупреждает до нуля остатка.</p></div>
+  </div>
 </section>
 
-<section>
-  <span class="tag">Карточки и SEO</span>
-  <h2>Карточки, которые находят и по которым кликают</h2>
-  <div class="grid">
-    <div class="card"><h3>Ключи и тексты</h3><ul><li>Разбор запросов: «нож кухонный», «шеф-нож», «нож для рыбалки»</li><li>Заголовок и описание отдельно под Ozon и WB</li><li>Характеристики: сталь, твёрдость, длина клинка, рукоять</li></ul></div>
-    <div class="card"><h3>Единый стиль</h3><p>Один раз описываете бренд и правила. Все карточки выходят в одном тоне, без пустых слов вроде «отличный» и «высокое качество».</p></div>
-    <div class="card"><h3>Инфографика</h3><p>Тексты слайдов, ТЗ дизайнеру или готовые HTML-макеты: в чём нож лучше, как заточен, что в комплекте.</p></div>
-  </div>
-</section>
-
-<section>
-  <span class="tag">Низкий CTR</span>
-  <h2>Недельный цикл: слабые карточки подтягиваются сами</h2>
-  <div class="loop">
-    <div class="n">1. Выгрузка статистики карточек</div><span class="ar">→</span>
-    <div class="n">2. Список с CTR ниже порога</div><span class="ar">→</span>
-    <div class="n">3. Гипотезы: главное фото, заголовок, цена</div><span class="ar">→</span>
-    <div class="n">4. Новые варианты текстов и ТЗ на фото</div><span class="ar">→</span>
-    <div class="n">5. Замер через 7–14 дней</div>
-  </div>
-  <div class="card" style="margin-top:20px"><p>Все тесты записываются в таблицу: что меняли, когда, какой стал CTR. Через пару месяцев это ваша база знаний о том, что работает именно на ножах. Решение о смене фото и текста всегда за вами.</p></div>
-</section>
-
+<!-- 9 : конкуренты -->
 <section>
   <span class="tag">Конкуренты и цены</span>
   <h2>Рынок под наблюдением без ручных обходов</h2>
-  <div class="grid">
-    <div class="card"><h3>Что собираем</h3><p>Цена, скидка, рейтинг, число отзывов, фото, заголовок у 10–20 ключевых конкурентов по публичным страницам.</p></div>
-    <div class="card"><h3>Что получаете</h3><p>Утренняя таблица изменений: кто снизил цену, у кого прыгнули отзывы, кто сменил главное фото. И короткая рекомендация.</p></div>
-    <div class="card"><h3>Правило</h3><p>Цену в кабинете меняете вы. ИИ предлагает и считает, не опускается ли цена ниже безубыточной.</p></div>
+  <div class="two">
+    <div class="ph">
+      <svg viewBox="0 0 400 260" role="img" aria-label="График цен: ваша и конкурентов">
+        <rect width="400" height="260" fill="var(--card)"/>
+        <g font-family="Arial" font-size="12" fill="#9aa7bd"><text x="14" y="22">Цена шеф-ножа, ₽: 14 дней (пример)</text><text x="14" y="244">день 1</text><text x="330" y="244">день 14</text></g>
+        <polyline fill="none" stroke="#7c5cff" stroke-width="3" points="20,110 80,110 140,110 200,110 260,110 320,110 380,110"/>
+        <polyline fill="none" stroke="#ff5d6c" stroke-width="3" points="20,90 80,90 140,90 200,90 230,130 260,130 380,128"/>
+        <polyline fill="none" stroke="#f5a524" stroke-width="3" points="20,150 80,148 140,148 200,146 260,144 320,142 380,140"/>
+        <circle cx="230" cy="130" r="7" fill="none" stroke="#ff5d6c" stroke-width="2"/>
+        <text x="236" y="165" font-family="Arial" font-size="12" fill="#ff5d6c">конкурент снизил цену</text>
+        <g font-family="Arial" font-size="12"><text x="20" y="60" fill="#7c5cff">▬ вы</text><text x="70" y="60" fill="#ff5d6c">▬ конкурент 1</text><text x="170" y="60" fill="#f5a524">▬ конкурент 2</text></g>
+      </svg>
+    </div>
+    <div class="card">
+      <h3>Утренняя таблица изменений</h3>
+      <ul>
+        <li>Кто снизил или поднял цену</li>
+        <li>У кого прыгнули отзывы и рейтинг</li>
+        <li>Кто сменил главное фото и заголовок</li>
+        <li>Короткая рекомендация: что стоит сделать</li>
+      </ul>
+      <div class="prompt">Вот ссылки на 15 конкурентов. Каждое утро собирай цену, рейтинг и отзывы, сравнивай со вчера и пиши, что изменилось.</div>
+      <p class="mut" style="margin-top:10px">Только публичные страницы. Цену в кабинете меняете вы, ИИ считает, не уходит ли она ниже безубыточной.</p>
+    </div>
   </div>
-  <div class="prompt">Вот ссылки на 15 конкурентов. Каждое утро собирай цену, рейтинг и отзывы, сравнивай со вчера и пиши, что изменилось и где мы теряем.</div>
 </section>
 
+<!-- 10 : реклама -->
 <section>
   <span class="tag">Реклама</span>
   <h2>Директ, ВКонтакте и где ещё можно размещаться</h2>
-  <div class="grid">
-    <div class="card"><h3>Яндекс Директ</h3><p>Разбор поисковых фраз, минус-слова, слабые объявления, ДРР по модели. Видно, какие ножи окупают рекламу, а какие нет.</p></div>
-    <div class="card"><h3>ВКонтакте: почему не идёт</h3><p>Диагностика: аудитория, креативы, настройки, оффер. Важно проверить правила размещения: у ножей часто строгая модерация.</p></div>
-    <div class="card"><h3>Что ещё проверить</h3><ul><li>Реклама внутри Ozon и WB</li><li>Яндекс Маркет и Авито</li><li>Telegram-каналы и блогеры: охота, рыбалка, кухня</li><li>Свой сайт и Яндекс Поиск</li><li>Повторные продажи: подписчики, мессенджер</li></ul></div>
+  <div class="ph">
+    <svg viewBox="0 0 800 210" role="img" aria-label="Воронка рекламы">
+      <rect width="800" height="210" fill="var(--card)"/>
+      <g font-family="Arial" font-size="14" font-weight="700" fill="#fff">
+        <path d="M20 20 H780 L740 70 H60Z" fill="#005bff"/><text x="400" y="52" text-anchor="middle">Показы объявлений</text>
+        <path d="M60 78 H740 L690 128 H110Z" fill="#7c5cff"/><text x="400" y="110" text-anchor="middle">Клики и переходы на карточку</text>
+        <path d="M110 136 H690 L640 186 H160Z" fill="#cb11ab"/><text x="400" y="168" text-anchor="middle">Заказы и повторные покупки</text>
+      </g>
+    </svg>
   </div>
-  <p class="mut">Claude Code делает анализ и план тестов с бюджетом, а площадки выбираете вы.</p>
+  <div class="grid" style="margin-top:14px">
+    <div class="card"><h3>Яндекс Директ</h3><p>Разбор поисковых фраз, минус-слова, слабые объявления, ДРР по модели. Видно, какие ножи окупают рекламу.</p></div>
+    <div class="card"><h3>ВКонтакте: почему не идёт</h3><p>Диагностика аудитории, креативов и оффера. Проверить правила размещения: у ножей часто строгая модерация.</p></div>
+    <div class="card"><h3>Что ещё проверить</h3><ul><li>Реклама внутри Ozon и WB</li><li>Яндекс Маркет, Авито</li><li>Telegram-каналы по охоте, рыбалке, кухне</li><li>Свой сайт, повторные продажи</li></ul></div>
+  </div>
 </section>
 
+<!-- 11 : отзывы -->
 <section>
   <span class="tag">Отзывы</span>
   <h2>Покупатели получают ответ, вы экономите вечер</h2>
-  <div class="grid">
-    <div class="card"><h3>Черновики ответов</h3><p>Вежливо и по делу, в вашем стиле. Негатив отдельно с предложением решения. Публикуете после просмотра.</p></div>
-    <div class="card"><h3>Причины возвратов</h3><p>Группировка по ножам: тупой, не тот размер, ожидание не совпало с фото. Из этого рождаются правки карточек.</p></div>
-    <div class="card"><h3>Идеи для товара</h3><p>Что в отзывах просят чаще всего: ножны, подарочная упаковка, набор. Это ваши новые позиции.</p></div>
+  <div class="two">
+    <div class="ph">
+      <svg viewBox="0 0 400 300" role="img" aria-label="Пример отзыва и черновика ответа">
+        <rect width="400" height="300" fill="#eef0f5"/>
+        <g font-family="Arial">
+          <rect x="16" y="16" width="368" height="110" rx="12" fill="#fff"/>
+          <text x="30" y="42" font-size="13" font-weight="700" fill="#141a29">Покупатель · ★★☆☆☆</text>
+          <text x="30" y="66" font-size="13" fill="#3b4558">Нож пришёл тупой, резать</text><text x="30" y="86" font-size="13" fill="#3b4558">помидор не получилось.</text>
+          <rect x="16" y="140" width="368" height="140" rx="12" fill="#e3f9f2"/>
+          <text x="30" y="164" font-size="12" font-weight="700" fill="#0b7a5b">Черновик ответа от Claude Code</text>
+          <text x="30" y="188" font-size="13" fill="#1c2d28">Здравствуйте! Спасибо, что написали.</text>
+          <text x="30" y="208" font-size="13" fill="#1c2d28">Заводская заточка требует лёгкой</text>
+          <text x="30" y="228" font-size="13" fill="#1c2d28">правки: напишите нам, подскажем,</text>
+          <text x="30" y="248" font-size="13" fill="#1c2d28">как быстро довести нож до остроты.</text>
+        </g>
+      </svg>
+    </div>
+    <div class="card">
+      <h3>Что даёт разбор отзывов</h3>
+      <ul>
+        <li>Причины возвратов по моделям: тупой, не тот размер, ожидание не совпало с фото</li>
+        <li>Идеи новых позиций: ножны, подарочная коробка, набор</li>
+        <li>Правки в карточки, чтобы вопросы пропали</li>
+      </ul>
+      <p class="mut" style="margin-top:10px">Ответ публикуете вы после просмотра. Пример отзыва условный.</p>
+    </div>
   </div>
 </section>
 
+<!-- 12 : карта -->
 <section>
-  <span class="tag">Контент</span>
-  <h2>Видео и фото без студии</h2>
-  <p>В Академии Claude Code монтирует видео, режет вертикальные ролики, делает субтитры и заставки. Для ножей это короткие клипы «резка помидора», «нарезка за 5 секунд», «заточка». Их можно ставить на карточки Ozon и WB и пробовать как креатив для ВКонтакте и Директа.</p>
+  <h2>Карта автоматизации</h2>
+  <table>
+    <tr><th>Процесс</th><th>Что делает Claude Code</th><th>Уровень</th></tr>
+    <tr><td>Наклейки и отправки</td><td>Лист сборки и PDF этикеток из выгрузки заказов</td><td class="lv a">почти полностью</td></tr>
+    <tr><td>Учёт в Excel</td><td>Сводит продажи, остатки, себестоимость, считает прибыль по ножам</td><td class="lv a">почти полностью</td></tr>
+    <tr><td>Утренняя сводка</td><td>Продажи, остатки, реклама за вчера, что требует внимания</td><td class="lv a">полностью</td></tr>
+    <tr><td>Карточки и SEO</td><td>Ключи, заголовки, описания, характеристики под Ozon и WB</td><td class="lv b">черновик, вы правите</td></tr>
+    <tr><td>Низкий CTR</td><td>Находит слабые карточки, предлагает гипотезы, ведёт журнал тестов</td><td class="lv b">черновик, вы решаете</td></tr>
+    <tr><td>Конкуренты и цены</td><td>Собирает публичные данные, строит динамику</td><td class="lv b">сбор сам, решение ваше</td></tr>
+    <tr><td>Яндекс Директ</td><td>Разбор фраз, минус-слова, объявления, ДРР</td><td class="lv b">анализ сам, правки вы</td></tr>
+    <tr><td>Отзывы</td><td>Черновики ответов, разбор возвратов</td><td class="lv c">помощник</td></tr>
+    <tr><td>ВКонтакте и новые каналы</td><td>Диагностика, идеи, тексты, план тестов</td><td class="lv c">помощник</td></tr>
+  </table>
 </section>
 
+<!-- 13 : опыт Академии -->
+<section>
+  <h2>Это уже работает: опыт Академии Сметного Дела</h2>
+  <p class="mut">Тот же Claude Code ведёт у нас рутину онлайн-школы. Вашу задачу собираем из проверенных деталей.</p>
+  <div class="grid">
+    <div class="card"><span class="tag">Каждое утро в 9:00</span><h3>Отчёт за вчера приходит сам</h3><p>Читает выгрузки, считает уникальных людей и каналы, пишет итог. У вас: продажи, остатки, реклама.</p></div>
+    <div class="card"><span class="tag">Дважды в день</span><h3>Мониторинг рынка</h3><p>Обходит сайты и каналы, отбирает важное, пишет дайджест. Так же обходим страницы конкурентов.</p></div>
+    <div class="card"><span class="tag">Выгрузки</span><h3>Скрипты под данные</h3><p>Выгрузка по API на чтение, очистка, отчёты в таблицы. Рутину пишет он, вы проверяете.</p></div>
+    <div class="card"><span class="tag">Команда ролей</span><h3>Аналитик, копирайтер, SEO, дизайнер</h3><p>Отдельные помощники под задачу: тексты, макеты, корректор, критик перед запуском.</p></div>
+  </div>
+</section>
+
+<!-- 14 : план -->
 <section>
   <h2>План на 4 недели</h2>
   <ol class="steps">
@@ -188,19 +405,22 @@ nav button{border:0;border-radius:10px;padding:10px 14px;background:var(--ac);co
   </ol>
 </section>
 
+<!-- 15 : ограничения -->
 <section>
   <h2>Честно про ограничения</h2>
   <div class="warn">
     <ul>
       <li>Ключи API кабинетов давайте только на <b>чтение</b>. Менять цены и публиковать карточки лучше самому.</li>
-      <li>Первые недели выборочно сверяйте цифры с кабинетами.</li>
-      <li>Сбор данных конкурентов только с публичных страниц и в рамках правил площадок.</li>
-      <li>Для ножей проверьте правила категорий Ozon, WB и рекламных площадок и требования закона к продаже и доставке. Это проверяете вы или юрист, а не ИИ.</li>
+      <li>Первые недели выборочно сверяйте цифры с кабинетами. Время экономии на экране 2 ориентировочное.</li>
+      <li>Данные конкурентов только с публичных страниц и в рамках правил площадок.</li>
+      <li>Чужие фото с карточек на площадках копировать в рекламу и презентации нельзя: используйте свои снимки.</li>
+      <li>Для ножей проверьте правила категорий Ozon, WB и рекламных площадок и требования закона к продаже и доставке.</li>
       <li>Не передавайте посторонним ключи и доступы.</li>
     </ul>
   </div>
 </section>
 
+<!-- 16 : финал -->
 <section>
   <p class="mut">С чего начать завтра</p>
   <div class="big grad">Отправки или прибыль по ножам</div>
@@ -216,6 +436,29 @@ document.addEventListener('keydown',function(e){
   if(['ArrowDown','PageDown',' ','ArrowRight'].indexOf(e.key)>-1){e.preventDefault();go(1)}
   if(['ArrowUp','PageUp','ArrowLeft'].indexOf(e.key)>-1){e.preventDefault();go(-1)}
 });
+function $(i){return document.getElementById(i)}
+function calc(){
+  var orders=+$('i1').value, min=+$('i2').value, cards=+$('i3').value, acc=+$('i4').value, comp=+$('i5').value;
+  $('o1').textContent=orders;$('o2').textContent=min;$('o3').textContent=cards;$('o4').textContent=acc;$('o5').textContent=comp;
+  var rows=[
+    ['Отправки и наклейки', orders*min*7/60, 0.15],
+    ['Карточки и SEO', cards*40/60, 12/40],
+    ['Учёт в Excel', acc, 0.15],
+    ['Конкуренты и реклама', comp, 0.35]
+  ];
+  var tb=0,ta=0,html='',max=Math.max.apply(null,rows.map(function(r){return r[1]}))||1;
+  rows.forEach(function(r){
+    var b=r[1],a=r[1]*r[2];tb+=b;ta+=a;
+    html+='<div class="bar"><span class="l">'+r[0]+'</span><div class="t"><div class="b1" style="width:'+(b/max*100)+'%"></div><div class="b2" style="width:'+(a/max*100)+'%"></div></div><span class="v">'+b.toFixed(1)+' → '+a.toFixed(1)+' ч</span></div>';
+  });
+  $('bars').innerHTML=html;
+  var s=tb-ta;
+  $('k1').textContent=s.toFixed(1);
+  $('k2').textContent=(s*4.3).toFixed(0);
+  $('k3').textContent=(s*52/8).toFixed(0);
+}
+['i1','i2','i3','i4','i5'].forEach(function(i){$(i).addEventListener('input',calc)});
+calc();
 </script>
 </body>
 </html>
